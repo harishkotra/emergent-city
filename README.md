@@ -4,6 +4,8 @@ Welcome to **Emergent City**, an open-source, AI-driven city simulation. Watch a
 
 This robust prototype was fully built using **FastAPI** for the backend engine and **Leaflet.js** for an ultra-smooth, continuous frontend visualization.
 
+<img width="1324" height="994" alt="Screenshot at Feb 27 10-42-36" src="https://github.com/user-attachments/assets/6e4ec065-cca4-4026-addc-3827b469262f" />
+
 ---
 
 ## 🧠 Why This Was Built
