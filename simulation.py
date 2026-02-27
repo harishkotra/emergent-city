@@ -49,6 +49,24 @@ class Simulation:
             "tax_collected": self.economy.total_tax_collected
         }
 
+    def make_it_rain(self):
+        for agent in self.agents:
+            agent.wallet += 1000.0
+
+    def spawn_traffic_jam(self):
+        # Find all active targets of drivers
+        targets = [a.target_node for a in self.agents if a.role == "driver" and a.target_node]
+        for t in targets:
+            if t in self.world.nodes:
+                self.world.congestion[t] = self.world.congestion.get(t, 0) + 100
+
+    def smite_agent(self, agent_id: str):
+        agent = next((a for a in self.agents if a.id == agent_id), None)
+        if agent:
+            agent.wallet = 0.0
+            return True
+        return False
+
     async def tick(self):
         self.tick_count += 1
         agent_paths = [a.path for a in self.agents if a.path]

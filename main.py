@@ -40,9 +40,10 @@ class CityRequest(BaseModel):
 
 @app.post("/api/change-city")
 async def change_city_endpoint(req: CityRequest):
-    global is_loading
+    global is_loading, is_running
     if req.city in config.CITIES:
         is_loading = True
+        is_running = False # Force pause the simulation when changing cities
         try:
             # Run in a threadpool so we don't block the FastAPI event loop completely
             # while OSMnx downloads and processes the graph.
@@ -53,6 +54,21 @@ async def change_city_endpoint(req: CityRequest):
             is_loading = False
         return {"success": True, "city": req.city}
     return {"success": False, "error": "City not found"}
+
+@app.post("/api/rain")
+def api_make_it_rain():
+    sim.make_it_rain()
+    return {"success": True, "message": "It's raining money!"}
+
+@app.post("/api/jam")
+def api_spawn_traffic_jam():
+    sim.spawn_traffic_jam()
+    return {"success": True, "message": "Traffic jam spawned!"}
+
+@app.post("/api/smite/{agent_id}")
+def api_smite_agent(agent_id: str):
+    success = sim.smite_agent(agent_id)
+    return {"success": success}
 
 @app.get("/api/state")
 def get_state():

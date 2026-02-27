@@ -129,6 +129,38 @@ html {
     transform: translateY(-1px);
 }
 
+.interactive-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.action-btn {
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border: 1px solid var(--border-glass);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.action-btn:active {
+    transform: translateY(1px);
+}
+
 .metrics-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

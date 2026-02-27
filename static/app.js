@@ -83,7 +83,14 @@ function updateUI(data) {
     if (data.loading) {
         loadingOverlay.classList.remove('hidden');
     } else {
+        const wasHidden = loadingOverlay.classList.contains('hidden');
         loadingOverlay.classList.add('hidden');
+        if (!wasHidden) {
+            // Force Leaflet to recalculate map size and redraw tiles since the overlay block might have messed with the container dimensions
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        }
     }
 
     if (isSimulationRunning) {
@@ -104,6 +111,17 @@ function updateUI(data) {
     document.getElementById('val-congestion').innerText = data.summary.congestion;
 
     const activeIds = new Set();
+
+    // Clear out agents that suddenly teleported across the world (indicates a city change occurred)
+    // We detect this if the first agent is more than 5 degrees away from the map center
+    if (data.agents.length > 0 && Math.abs(data.agents[0].lat - data.center.lat) > 5) {
+        Object.keys(agents).forEach(id => {
+            map.removeLayer(agents[id].marker);
+            map.removeLayer(agents[id].pathLine);
+            delete agents[id];
+        });
+        return; // Skip this UI update, wait for the backend to finish loading the new city
+    }
 
     data.agents.forEach(agent => {
         activeIds.add(agent.id);
@@ -131,6 +149,16 @@ function updateUI(data) {
 
             marker.addTo(map);
             pathLine.addTo(map);
+
+            // Smite agent on click
+            marker.on('click', async () => {
+                try {
+                    await fetch(`/api/smite/${agent.id}`, { method: 'POST' });
+                    fetchState(); // Immediately refresh the UI to show wallet $0
+                } catch (err) {
+                    console.error("Failed to smite agent:", err);
+                }
+            });
 
             agents[agent.id] = {
                 marker,
@@ -233,6 +261,25 @@ document.getElementById('toggle-btn').addEventListener('click', async () => {
     }
 });
 
+// Interactive Features
+document.getElementById('rain-btn').addEventListener('click', async () => {
+    try {
+        await fetch('/api/rain', { method: 'POST' });
+        fetchState();
+    } catch (err) {
+        console.error("Failed to make it rain:", err);
+    }
+});
+
+document.getElementById('jam-btn').addEventListener('click', async () => {
+    try {
+        await fetch('/api/jam', { method: 'POST' });
+        fetchState();
+    } catch (err) {
+        console.error("Failed to spawn jam:", err);
+    }
+});
+
 document.getElementById('city-select').addEventListener('change', async (e) => {
     try {
         const city = e.target.value;
@@ -242,12 +289,20 @@ document.getElementById('city-select').addEventListener('change', async (e) => {
             body: JSON.stringify({ city })
         });
 
-        // Let the normal polling pick up the loading state and clear out agents
+        // Let the normal polling pick up the loading state
         fetchState();
 
         // Re-center map slightly early to make the transition feel faster
         // The backend will also send the exact center of the new nodes later
         isFirstLoad = true;
+
+        // Wipe all current markers and paths immediately so they don't stretch
+        Object.keys(agents).forEach(id => {
+            map.removeLayer(agents[id].marker);
+            map.removeLayer(agents[id].pathLine);
+            delete agents[id];
+        });
+
     } catch (err) {
         console.error("Failed to change city:", err);
     }
