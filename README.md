@@ -6,6 +6,9 @@ This robust prototype was fully built using **FastAPI** for the backend engine a
 
 <img width="1324" height="994" alt="Screenshot at Feb 27 10-42-36" src="https://github.com/user-attachments/assets/6e4ec065-cca4-4026-addc-3827b469262f" />
 
+<img width="1326" height="995" alt="screencapture-localhost-8000-static-index-html-2026-02-27-10_44_05" src="https://github.com/user-attachments/assets/5153fd7e-fb9b-4ad7-9264-9cbb3940fba9" />
+
+
 ---
 
 ## 🧠 Why This Was Built
