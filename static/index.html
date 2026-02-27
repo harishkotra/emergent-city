@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergent City</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <div id="ui-panel" class="glass-panel">
+        <h1>Emergent City</h1>
+        <div class="status-indicator">
+            <span id="status-dot" class="dot stopped"></span>
+            <span id="status-text">Stopped</span>
+        </div>
+
+        <div class="controls-row">
+            <select id="city-select" class="styled-select">
+                <option value="Hyderabad">Hyderabad</option>
+                <option value="Bengaluru">Bengaluru</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Chennai">Chennai</option>
+                <option value="New Delhi">New Delhi</option>
+                <option value="Jaipur">Jaipur</option>
+                <option value="Kolkata">Kolkata</option>
+            </select>
+            <select id="map-style" class="styled-select">
+                <option value="dark">Dark Matter</option>
+                <option value="light">Positron</option>
+                <option value="voyager">Voyager</option>
+                <option value="satellite">Satellite</option>
+                <option value="watercolor">Watercolor</option>
+                <option value="terrain">Terrain</option>
+                <option value="cyclosm">CyclOSM</option>
+            </select>
+        </div>
+
+        <button id="toggle-btn" class="primary-btn">Start Simulation</button>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="label">Total Money</span>
+                <span class="value" id="val-total-money">$0.00</span>
+            </div>
+            <div class="metric-card">
+                <span class="label">Avg Wallet</span>
+                <span class="value" id="val-avg-wallet">$0.00</span>
+            </div>
+            <div class="metric-card">
+                <span class="label">Tax Collected</span>
+                <span class="value" id="val-tax">$0.00</span>
+            </div>
+            <div class="metric-card">
+                <span class="label">Congestion</span>
+                <span class="value" id="val-congestion">0</span>
+            </div>
+        </div>
+
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-item"><span class="emoji">🧍</span> Resident (Blue)</div>
+            <div class="legend-item"><span class="emoji">🏪</span> Shop (Green)</div>
+            <div class="legend-item"><span class="emoji">🚗</span> Driver (Red)</div>
+        </div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <h2>Downloading City Map...</h2>
+        <p>OSMnx is building the road network.</p>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <!-- Custom App JS -->
+    <script src="/static/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,5 @@
+{
+  "name": "Emergent City",
+  "description": "A minimal but visually impressive autonomous urban simulation powered by local LLM agents.",
+  "requestFramePermissions": []
+}
